@@ -30,17 +30,13 @@ function loadData() {
         'q': "Thanksgiving",
         'fl': "snippet, web_url"
     });
-    // $.ajax({
-    //     url: url,
-    //     method: 'GET',
-    // }).done(function(result) {
-    //     console.log(result);
-    // }).fail(function(err) {
-    //     throw err;
-    // });
 
     $.getJSON(url, function(data) {
-        console.log(data);
+        var docs = data.response.docs;
+        for(var i in docs) {
+            console.log(docs[i].snippet);
+            console.log(docs[i].web_url);
+        }
     });
 
     return false;
