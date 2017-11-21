@@ -39,6 +39,8 @@ function loadData() {
             '<a href="'+article.web_url+'">'+article.headline.main+'</a>'+
             '<p>'+article.snippet+'</p>'+'</li>')
         };
+    }).fail(function(e) {
+        $nytHeaderElem.text('Could Not Find New York Times Articles About ' + cityStr);
     });
 
     return false;
