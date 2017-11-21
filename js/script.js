@@ -23,20 +23,22 @@ function loadData() {
 
     $body.append('<img class="bgimg" src="' + streetViewUrl + '">');
 
-    // Built by LucyBot. www.lucybot.com
     var url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
     url += '?' + $.param({
         'api-key': mykey,
-        'q': "Thanksgiving",
-        'fl': "snippet, web_url"
+        'q': cityStr,
+        'sort': 'newest'
     });
 
     $.getJSON(url, function(data) {
-        var docs = data.response.docs;
-        for(var i in docs) {
-            console.log(docs[i].snippet);
-            console.log(docs[i].web_url);
-        }
+        $nytHeaderElem.text('New York Times Articles About ' + cityStr);
+        articles = data.response.docs;
+        for (var i=0; i<articles.length; i++){
+            var article = articles[i];
+            $nytElem.append('<li class = "artice">'+
+            '<a href="'+article.web_url+'">'+article.headline.main+'</a>'+
+            '<p>'+article.snippet+'</p>'+'</li>')
+        };
     });
 
     return false;
