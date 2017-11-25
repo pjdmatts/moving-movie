@@ -33,14 +33,34 @@ function loadData() {
     $.getJSON(url, function(data) {
         $nytHeaderElem.text('New York Times Articles About ' + cityStr);
         articles = data.response.docs;
-        for (var i=0; i<articles.length; i++){
+        for (var i = 0; i < articles.length; i++) {
             var article = articles[i];
-            $nytElem.append('<li class = "artice">'+
-            '<a href="'+article.web_url+'">'+article.headline.main+'</a>'+
-            '<p>'+article.snippet+'</p>'+'</li>')
+            $nytElem.append('<li class = "artice">' +
+                '<a href="' + article.web_url + '">' + article.headline.main + '</a>' +
+                '<p>' + article.snippet + '</p>' + '</li>')
         };
     }).fail(function(e) {
         $nytHeaderElem.text('Could Not Find New York Times Articles About ' + cityStr);
+    });
+
+    var wikiUrl = 'https://en.wikipedia.org/w/api.php?action=opensearch&search=' + cityStr + '&format=json&callback=wikiCallback';
+
+    var wikiRequestTimeout = setTimeout(function(){
+        $wikiElem.text("failed to get Wikipedia resources");
+    }, 8000);
+
+    $.ajax({
+        url: wikiUrl,
+        dataType: "jsonp",
+        success: function(data) {
+            var articleList = data[1];
+            for (var i = 0; i < articleList.length; i++) {
+                articleStr = articleList[i];
+                var url = 'http://en.wikipedia.org/wiki/' + articleStr;
+                $wikiElem.append('<li><a href = "' + url + '">' + articleStr + '</a></li>');
+            };
+            clearTimeout(wikiRequestTimeout);
+        }
     });
 
     return false;
